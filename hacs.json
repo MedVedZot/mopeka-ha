@@ -1,7 +1,6 @@
 {
   "name": "Mopeka HA",
   "render_readme": true,
-  "category": "integration",
   "homeassistant": "2024.1.0",
   "country": ["US", "MX"],
   "zip_release": false,
