@@ -1,0 +1,38 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Mopeka HA",
+        "description": "Enter your Mopeka credentials to sync your tank sensors.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      },
+      "sensors": {
+        "title": "Select Sensors",
+        "description": "Select which sensors you want to create."
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid email or password",
+      "unknown": "Unexpected error",
+      "no_sensors_selected": "Please select at least one sensor"
+    },
+    "abort": {
+      "already_configured": "This account is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Select Sensors",
+        "description": "Select which sensors you want to create."
+      }
+    },
+    "error": {
+      "no_sensors_selected": "Please select at least one sensor"
+    }
+  }
+}

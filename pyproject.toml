@@ -1,0 +1,89 @@
+[project]
+name = "mopeka-ha"
+version = "1.2.3"
+description = "Home Assistant custom integration for Mopeka ultrasonic propane tank sensors"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Aleksandr Zhuravlev", email = "jss.putty@gmail.com"}]
+keywords = ["home-assistant", "hacs", "integration", "mopeka", "propane", "tank", "sensor"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Home Automation",
+]
+dependencies = ["mopeka-api==1.0.2"]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.0",
+    "pylint>=3.0.0",
+    "pytest>=8.0.0",
+    "pytest-homeassistant-custom-component>=0.13.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/MedVedZot/mopeka-ha"
+Documentation = "https://github.com/MedVedZot/mopeka-ha"
+Repository = "https://github.com/MedVedZot/mopeka-ha.git"
+Issues = "https://github.com/MedVedZot/mopeka-ha/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP"]
+ignore = ["E501", "B008", "C901"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.pylint.MAIN]
+py-version = "3.11"
+ignore-paths = ["^tests/.*$"]
+ignored-modules = ["mopeka.client"]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "format",
+    "abstract-method",
+    "duplicate-code",
+    "too-many-ancestors",
+    "too-many-arguments",
+    "too-many-branches",
+    "too-many-instance-attributes",
+    "too-many-locals",
+    "too-many-public-methods",
+    "too-many-return-statements",
+    "too-many-statements",
+    "unused-argument",
+    "missing-docstring",
+    "import-outside-toplevel",
+    "attribute-defined-outside-init",
+    "broad-exception-caught"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+norecursedirs = [".git"]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["custom_components.mopeka_ha"]
+omit = ["tests/*"]

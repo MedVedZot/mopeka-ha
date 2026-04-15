@@ -1,0 +1,39 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Mopeka HA",
+        "description": "Introduce tus credenciales de Mopeka para sincronizar tus sensores de tanque.",
+        "data": {
+          "email": "Correo electrónico",
+          "password": "Contraseña"
+        }
+      },
+      "sensors": {
+        "title": "Seleccionar Sensores",
+        "description": "Selecciona qué sensores quieres crear. Debes seleccionar al menos un sensor."
+      }
+    },
+    "error": {
+      "cannot_connect": "Error al conectar",
+      "invalid_auth": "Correo o contraseña incorrectos",
+      "unknown": "Error inesperado",
+      "no_sensors_selected": "Por favor, selecciona al menos un sensor",
+      "no_devices_found": "No se encontraron dispositivos en tu cuenta de Mopeka"
+    },
+    "abort": {
+      "already_configured": "Esta cuenta ya está configurada"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Seleccionar Sensores",
+        "description": "Selecciona qué sensores quieres crear. Debes seleccionar al menos un sensor."
+      }
+    },
+    "error": {
+      "no_sensors_selected": "Por favor, selecciona al menos un sensor"
+    }
+  }
+}
