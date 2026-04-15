@@ -1,7 +1,5 @@
 # Mopeka HA Integration
 
-**Version:** 1.2.4
-
 <p align="left">
   <a href="https://buymeacoffee.com/MedVedZot">
     <img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&slug=MedVedZot&button_colour=FFDD00&font_colour=000000&font_family=Arial&outline_colour=000000&coffee_colour=ffffff" />
@@ -12,8 +10,8 @@ No subscriptions. Just support if you find value.
 
 Home Assistant custom integration for Mopeka ultrasonic propane tank sensors via Mopeka Cloud API.
 
-![Version](https://img.shields.io/badge/version-1.2.3-blue)
-![Home Assistant](https://img.shields.io/badge/HAC-2024.1.0%2B-green)
+![Version](https://img.shields.io/badge/version-1.2.4-blue)
+![Home Assistant](https://img.shields.io/badge/HA-2024.1.0%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-orange)
 
 ## Features
@@ -34,6 +32,8 @@ Home Assistant custom integration for Mopeka ultrasonic propane tank sensors via
 - Network access to Mopeka Cloud API
 
 ## Installation
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MedVedZot&repository=mopeka-ha&category=integration)
 
 ### Via HACS (Recommended)
 
