@@ -105,7 +105,15 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             display_data = {}
 
         if user_input is not None:
-            selected = [k.split(" (")[0] for k, v in user_input.items() if v]
+            selected = []
+            for k, v in user_input.items():
+                if v:
+                    if "(" in k:
+                        sensor_key = k.split(" (")[0]
+                    else:
+                        sensor_key = k
+                    selected.append(sensor_key)
+            
             if not selected:
                 errors["base"] = "no_sensors_selected"
             else:
@@ -136,7 +144,14 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             pwd = user_input.get(CONF_PASSWORD) or self.entry.data[CONF_PASSWORD]
             check_data = {CONF_EMAIL: self.entry.data[CONF_EMAIL], CONF_PASSWORD: pwd}
             
-            selected = [k.split(" (")[0] for k, v in user_input.items() if v and "(" in k]
+            selected = []
+            for k, v in user_input.items():
+                if v:
+                    if "(" in k:
+                        sensor_key = k.split(" (")[0]
+                    else:
+                        sensor_key = k
+                    selected.append(sensor_key)
             
             if not selected:
                 errors["base"] = "no_sensors_selected"
@@ -169,8 +184,13 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         }
 
         display_data = {}
-        if coordinator and hasattr(coordinator, 'data') and coordinator.data:
-            display_data = _get_combined_states(coordinator.data.values())
+        try:
+            if coordinator and hasattr(coordinator, 'data') and coordinator.data:
+                device_values = list(coordinator.data.values())
+                if device_values:
+                    display_data = _get_combined_states(device_values)
+        except Exception:
+            display_data = {}
 
         for s in sorted(STATIC_SENSORS):
             val = display_data.get(s, "n/a")

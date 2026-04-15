@@ -698,3 +698,40 @@ async def test_device_rename_with_conflict(hass):
         assert hass.states.get("sensor.propane_tank_battery") is not None
         # Only one sensor entity will exist due to the naming conflict
         # but the system should not crash
+
+
+async def test_sensor_device_removed_from_coordinator(hass):
+    """Test sensor handles device removal from coordinator gracefully."""
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title="test@example.com",
+        data={CONF_EMAIL: "test@example.com", CONF_PASSWORD: "test-password"},
+        options={"sensors": ["battery"]}
+    )
+    entry.add_to_hass(hass)
+
+    mock_device = {
+        "device_id": "MOP123",
+        "name": "Gas Tank",
+        "battery": 3.0,
+    }
+
+    with patch("mopeka.client.MopekaClient") as mock_client:
+        mock_client.return_value.get_full_state.return_value = [mock_device]
+        
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+
+        assert hass.states.get("sensor.gas_tank_battery") is not None
+        assert hass.states.get("sensor.gas_tank_battery").state == "3.0"
+
+        # Simulate device removal by clearing coordinator data
+        coordinator = hass.data[DOMAIN][entry.entry_id]
+        
+        # Force a refresh with empty data
+        mock_client.return_value.get_full_state.return_value = []
+        await coordinator.async_refresh()
+        await hass.async_block_till_done()
+        
+        # Sensor should handle empty data gracefully
+        assert coordinator.data == {}

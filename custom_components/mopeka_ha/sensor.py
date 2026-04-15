@@ -56,7 +56,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
     entity_registry = er.async_get(hass)
 
     existing_entries = er.async_entries_for_config_entry(entity_registry, entry.entry_id)
-    existing_entries = er.async_entries_for_config_entry(entity_registry, entry.entry_id)
     
     all_possible_keys = set(MAP.keys()) | {
         "updated_human_readable", "vertical", "propaneButaneRatio", 
@@ -83,8 +82,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
         known_sensor_keys = set(selected)
         known_sensor_keys.update(k for k in data if k not in DEVICE_INFO_FIELDS)
 
-        new_prefix = slugify(api_name)
+        new_prefix = slugify(api_name) or ""
         if not new_prefix:
+            _LOGGER.debug("Skipping device %s: empty slugified name", device_id)
             continue
             
         entity_entries = er.async_entries_for_device(entity_registry, device.id, include_disabled_entities=True)
@@ -127,7 +127,8 @@ class MopekaSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self._dev_id = device_id
         self._key = sensor_key
-        unit, icon, device_class, state_class = get_config(sensor_key, coordinator.data[device_id].get(sensor_key))
+        device_data = coordinator.data.get(device_id, {})
+        unit, icon, device_class, state_class = get_config(sensor_key, device_data.get(sensor_key))
         self._attr_unique_id = f"{device_id}_{sensor_key}"
         self._attr_native_unit_of_measurement = unit
         self._attr_device_class = device_class
@@ -141,7 +142,7 @@ class MopekaSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def device_info(self):
-        data = self.coordinator.data[self._dev_id]
+        data = self.coordinator.data.get(self._dev_id, {})
         return DeviceInfo(
             identifiers={(DOMAIN, self._dev_id)},
             name=data.get("name"),
@@ -153,4 +154,5 @@ class MopekaSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def native_value(self):
-        return self.coordinator.data[self._dev_id].get(self._key)
+        device_data = self.coordinator.data.get(self._dev_id, {})
+        return device_data.get(self._key)

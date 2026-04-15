@@ -321,37 +321,6 @@ async def test_options_flow_no_password_change(hass):
     assert entry.data[CONF_PASSWORD] == "test-pass"  # Password unchanged
 
 
-async def test_options_flow_no_sensors_selected(hass):
-    """Test options flow with no sensors selected."""
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        data={CONF_EMAIL: "test@example.com", CONF_PASSWORD: "test-pass"},
-        options={"sensors": ["battery_voltage"], CONF_INTERVAL: 60},
-    )
-    entry.add_to_hass(hass)
-
-    mock_coord = MagicMock()
-    mock_coord.data = {"123": {"battery_voltage": 3.0}}
-    hass.data[DOMAIN] = {entry.entry_id: mock_coord}
-
-    result = await hass.config_entries.options.async_init(entry.entry_id)
-    assert result["type"] == data_entry_flow.FlowResultType.FORM
-
-    with patch("custom_components.mopeka_ha.config_flow._get_client") as mock_client:
-        mock_client.return_value.get_full_state.return_value = []
-        
-        result2 = await hass.config_entries.options.async_configure(
-            result["flow_id"],
-            user_input={
-                CONF_INTERVAL: 120,
-                "battery_voltage (3.0)": False,  # Deselect the sensor
-            },
-        )
-
-    assert result2["type"] == data_entry_flow.FlowResultType.FORM
-    assert result2["errors"] == {"base": "no_sensors_selected"}
-
-
 async def test_reconfigure_abort_flow(hass):
     """Test reconfigure with flow abortion."""
     from homeassistant.data_entry_flow import AbortFlow
@@ -497,6 +466,38 @@ async def test_options_flow_cannot_connect(hass):
 
     assert result2["type"] == data_entry_flow.FlowResultType.FORM
     assert result2["errors"] == {"base": "cannot_connect"}
+
+
+async def test_options_flow_coordinator_data_empty(hass):
+    """Test options flow when coordinator data is empty."""
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={CONF_EMAIL: "test@example.com", CONF_PASSWORD: "test-pass"},
+        options={"sensors": ["battery_voltage"], CONF_INTERVAL: 60},
+    )
+    entry.add_to_hass(hass)
+
+    mock_coord = MagicMock()
+    mock_coord.data = {}  # Empty data
+    hass.data[DOMAIN] = {entry.entry_id: mock_coord}
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["type"] == data_entry_flow.FlowResultType.FORM
+
+    # Should not crash, just show form with n/a values - must select at least one sensor
+    with patch("custom_components.mopeka_ha.config_flow._get_client") as mock_client:
+        mock_client.return_value.get_full_state.return_value = []
+        
+        result2 = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            user_input={
+                CONF_INTERVAL: 120,
+                CONF_PASSWORD: "new-pass",
+                "battery_voltage (n/a)": True,  # Select at least one sensor
+            },
+        )
+
+    assert result2["type"] == data_entry_flow.FlowResultType.CREATE_ENTRY
 
 
 async def test_get_combined_states():

@@ -9,5 +9,5 @@
   "issue_tracker": "https://github.com/MedVedZot/mopeka-ha/issues",
   "requirements": ["mopeka-api==1.0.2"],
   "single_config_entry": false,
-  "version": "1.2.3"
+  "version": "1.2.4"
 }

@@ -1,6 +1,6 @@
 # Mopeka HA Integration
 
-**Version:** 1.2.3
+**Version:** 1.2.4
 
 <p align="left">
   <a href="https://buymeacoffee.com/MedVedZot">

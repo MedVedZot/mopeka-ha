@@ -1,6 +1,6 @@
 [project]
 name = "mopeka-ha"
-version = "1.2.3"
+version = "1.2.4"
 description = "Home Assistant custom integration for Mopeka ultrasonic propane tank sensors"
 readme = "README.md"
 requires-python = ">=3.11"

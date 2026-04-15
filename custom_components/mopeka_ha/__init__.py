@@ -25,6 +25,17 @@ API_DEFAULTS = {
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     config = {"username": entry.data[CONF_EMAIL], "password": entry.data[CONF_PASSWORD], **API_DEFAULTS}
     interval = entry.options.get(CONF_INTERVAL, DEFAULT_INTERVAL)
+    
+    # Ensure interval is positive integer
+    try:
+        interval = int(interval)
+    except (ValueError, TypeError):
+        _LOGGER.warning("Invalid interval %s, using default %s", interval, DEFAULT_INTERVAL)
+        interval = DEFAULT_INTERVAL
+    
+    if interval <= 0:
+        _LOGGER.warning("Invalid interval %s, using default %s", interval, DEFAULT_INTERVAL)
+        interval = DEFAULT_INTERVAL
 
     async def async_update_data():
         try:
@@ -41,7 +52,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 def _fetch_data(config: dict) -> dict:
     from mopeka.client import MopekaClient
-    return {s["device_id"]: s for s in MopekaClient(config).get_full_state()}
+    devices = MopekaClient(config).get_full_state()
+    if not devices:
+        return {}
+    return {s.get("device_id"): s for s in devices if s.get("device_id")}
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     await hass.config_entries.async_reload(entry.entry_id)
