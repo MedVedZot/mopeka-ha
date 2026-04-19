@@ -10,7 +10,7 @@ No subscriptions. Just support if you find value.
 
 Home Assistant custom integration for Mopeka ultrasonic propane tank sensors via Mopeka Cloud API.
 
-![Version](https://img.shields.io/badge/version-1.2.4-blue)
+![Version](https://img.shields.io/badge/version-1.2.5-blue)
 ![Home Assistant](https://img.shields.io/badge/HA-2024.1.0%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-orange)
 

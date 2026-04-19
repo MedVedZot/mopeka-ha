@@ -11,7 +11,7 @@ Home Assistant integration for Mopeka ultrasonic propane tank sensors via Mopeka
 
 - Home Assistant 2024.1.0 or newer
 - Mopeka account with WiFi-connected sensors
-- mopeka-api==1.0.2
+- mopeka-api==1.0.4
 
 ## Installation
 
